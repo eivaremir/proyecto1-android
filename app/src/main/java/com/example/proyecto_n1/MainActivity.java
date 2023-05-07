@@ -15,8 +15,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView txt;
     final String field = "PK";
     final String value = "PARTICIPANT";
-    private static AsyncHttpClient client1 = new AsyncHttpClient();
-    private static AsyncHttpClient client2 = new AsyncHttpClient();
 
 
     @Override
@@ -27,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
         String user = intent.getStringExtra(Login.USER);
         TextView jury_name = findViewById(R.id.jury_username);
 
-
-        //DynamoClient api = new DynamoClient();
         txt = findViewById(R.id.txt);
 
         DynamoClient.list(field, value, new JsonHttpResponseHandler() {
@@ -39,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     P = response.getJSONObject(0);
-                    txt.setText(P.getString("PK"));
-                    System.out.println(P.getString("PK"));
+                    txt.setText(P.getString(field));
+                    System.out.println(P.getString(field));
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
