@@ -3,7 +3,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.loopj.android.http.*;
 import org.json.*;
@@ -13,23 +15,51 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
     private TextView txt;
+    public static final String PARTICIPANT = "com.example.proyecto_n1.PARTICIPANT";
+    public static final String PARTICIPANT_NAME = "com.example.proyecto_n1.PARTICIPANT_NAME";
     final String field = "PK";
     final String value = "PARTICIPANT";
     private static AsyncHttpClient client1 = new AsyncHttpClient();
     private static AsyncHttpClient client2 = new AsyncHttpClient();
 
-
+    public String[] participants = {"A","B"};
+    public EditText[] pButtons;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         String user = intent.getStringExtra(Login.USER);
         TextView jury_name = findViewById(R.id.jury_username);
 
+        // https://stackoverflow.com/questions/6661261/adding-content-to-a-linear-layout-dynamically
+        // LinearLayout myRoot = (LinearLayout) findViewById(R.id.my_root);
+        //LinearLayout a = new LinearLayout(this);
+        //a.setOrientation(LinearLayout.HORIZONTAL);
+        //a.addView(view1);
+        //a.addView(view2);
+        //a.addView(view3);
+        //myRoot.addView(a);
+        LinearLayout pcontainer = (LinearLayout) findViewById(R.id.participants_container);
+
+        for(int i = 0; i<participants.length;i++){
+            TextView tv = new TextView(this);
+            tv.setText(participants[i]);
+            tv.setTag(i);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //System.out.println("clicked %i"+ (int )view.getTag());
+                    openVoteActivity((int )view.getTag());
+                }
+            });
+            pcontainer.addView(tv);
+        }
 
         //DynamoClient api = new DynamoClient();
-        txt = findViewById(R.id.txt);
+        //txt = findViewById(R.id.txt);
 
         DynamoClient.list(field, value, new JsonHttpResponseHandler() {
             @Override
@@ -39,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     P = response.getJSONObject(0);
-                    txt.setText(P.getString("PK"));
+                    //txt.setText(P.getString("PK"));
                     System.out.println(P.getString("PK"));
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -86,6 +116,13 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         System.out.println("HOLA");
+    }
+
+    public void openVoteActivity(Integer participant){
+        Intent intent = new Intent(this,Vote.class);
+        intent.putExtra(PARTICIPANT,participant);
+        intent.putExtra(PARTICIPANT_NAME,participants[participant]);
+        startActivity(intent);
     }
 
 }
