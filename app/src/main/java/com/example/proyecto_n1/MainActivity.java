@@ -1,9 +1,14 @@
 package com.example.proyecto_n1;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
 import com.loopj.android.http.*;
 import org.json.*;
+import org.w3c.dom.Text;
+
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        String user = intent.getStringExtra(Login.USER);
+        TextView jury_name = findViewById(R.id.jury_username);
+
 
         //DynamoClient api = new DynamoClient();
         txt = findViewById(R.id.txt);
@@ -39,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        jury_name.setText(user);
+
         /*client1.get("https://bsomlyl7kivajbpbxyt6i7aiku0zkjqp.lambda-url.us-east-1.on.aws/", new JsonHttpResponseHandler() { //proyecto-android-put
 
             @Override
@@ -57,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject firstEvent = null;
                 try {
                     firstEvent = timeline.getJSONObject(0);
-                    txt.setText(firstEvent.getString("PK"));
+                    //txt.setText(firstEvent.getString("PK"));
                     System.out.println(firstEvent.getString("PK"));
 
 
