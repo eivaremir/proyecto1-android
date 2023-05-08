@@ -29,7 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Proyeccion" />
+                android:text="Proyeccion"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
                 android:id="@+id/proyeccion"
@@ -50,7 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Lenguaje" />
+                android:text="Lenguaje"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
                 android:id="@+id/lenguaje"
@@ -71,7 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Contenido" />
+                android:text="Contenido"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
                 android:id="@+id/contenido"
@@ -100,7 +103,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Votar por:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
