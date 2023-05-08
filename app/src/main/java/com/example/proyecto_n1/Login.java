@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,59 +26,62 @@ public class Login extends AppCompatActivity {
     String text;
     int jury_id;
 
-
+    Button loginButton;
+    ProgressBar progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Button loginButton = findViewById(R.id.btn_login);
+        loginButton = findViewById(R.id.btn_login);
         EditText user = findViewById(R.id.username);
+
+        progress= findViewById(R.id.progressLogin);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //openMainActivity();
+                toggleSpinner(true);
                 text = user.getText().toString();
                 DynamoClient.list(field, text, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        // System.out.println(timeline);
-
                         JSONObject id = null;
-
                         if (response.length() != 0){
                             try {
                                 id = response.getJSONObject(0);
                                 String[] jurys_id = id.getString("PK").split("#");
                                 jury_id = Integer.parseInt(jurys_id[1]);
                                 System.out.println("Jury ID:" + jurys_id[1]);
-                                //jury_id = id.getString("PK");
-                                /*for (String a : jurys_id)
-                                    System.out.println("Jury ID:" + a);*/
                                 openMainActivity(jury_id);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
 
+                            } catch (JSONException e) {
+                                toggleSpinner(false);
+                                throw new RuntimeException(e);
+
+                            }
                         }
                         else {
+                            toggleSpinner(false);
                             System.out.println("Usuario Incorrecto");
                             Toast.makeText(Login.this, "Usuario Incorrecto", Toast.LENGTH_SHORT).show();
                         }
-
-                        //txt.setText(P.getString(field));
                         System.out.println(response);
-
-
-
-                        //System.out.println(id.getString(field));
-
                     }
                 });
             }
         });
     }
 
+    public void toggleSpinner(Boolean display){
+        if (display){
+            loginButton.setVisibility(View.INVISIBLE);
+            progress.setVisibility(View.VISIBLE);
+        }
+        else{
+            loginButton.setVisibility(View.VISIBLE);
+            progress.setVisibility(View.INVISIBLE);
+        }
+    }
     public void openMainActivity(int id){
         EditText user = findViewById(R.id.username);
         String text = user.getText().toString();

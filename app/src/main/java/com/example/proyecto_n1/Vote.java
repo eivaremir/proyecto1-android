@@ -2,6 +2,7 @@ package com.example.proyecto_n1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -73,7 +74,6 @@ public class Vote extends AppCompatActivity {
         voteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 proyeccion_pts = Integer.parseInt(proyeccion.getText().toString());
                 lenguaje_pts = Integer.parseInt(lenguaje.getText().toString());
                 contenido_pts = Integer.parseInt(contenido.getText().toString());
@@ -85,13 +85,11 @@ public class Vote extends AppCompatActivity {
                 } else {
                     voteBtn.setVisibility(View.INVISIBLE);
                     voting.setVisibility(View.VISIBLE);
-
                     DynamoClient.put(jury_id, participant, proyeccion_pts, lenguaje_pts, contenido_pts, new JsonHttpResponseHandler());
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
                 }
-
-
-
-
             }
         });
     }

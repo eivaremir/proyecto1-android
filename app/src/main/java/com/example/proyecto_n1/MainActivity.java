@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -120,6 +121,23 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         //System.out.println("ID JURADO: " + jury_id);
+        ((Button) findViewById(R.id.results)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //System.out.println("clicked %i"+ (int )view.getTag());
+                openResultsActivity();
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ( resultCode == RESULT_OK) {
+            // refresh data in the parent activity here
+            // check if i need to refresh data or not
+            System.out.println("exito");
+        }
     }
 
     public void openVoteActivity(Integer participant, int jury_id){
@@ -127,6 +145,10 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(PARTICIPANT,participant);
         intent.putExtra(PARTICIPANT_NAME,participants[participant]);
         intent.putExtra(ID_JURY ,jury_id);
+        startActivityForResult(intent,1);
+    }
+    public void openResultsActivity(){
+        Intent intent = new Intent(this,Results.class);
         startActivity(intent);
     }
 
