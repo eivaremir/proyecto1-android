@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txt;
     public static final String PARTICIPANT = "com.example.proyecto_n1.PARTICIPANT";
     public static final String PARTICIPANT_NAME = "com.example.proyecto_n1.PARTICIPANT_NAME";
+    public static final String ID_JURY = "com.example.proyecto_n1.ID_JURY";
     final String field = "PK";
     final String value = "PARTICIPANT";
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         String user = intent.getStringExtra(Login.USER);
+        int jury_id = intent.getIntExtra(Login.ID,0);
         TextView jury_name = findViewById(R.id.jury_username);
 
 
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //System.out.println("clicked %i"+ (int )view.getTag());
-                    openVoteActivity((int )view.getTag());
+                    openVoteActivity((int)view.getTag(), jury_id);
                 }
             });
             pcontainer.addView(tv);
@@ -117,13 +119,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        System.out.println("HOLA");
+        //System.out.println("ID JURADO: " + jury_id);
     }
 
-    public void openVoteActivity(Integer participant){
+    public void openVoteActivity(Integer participant, int jury_id){
         Intent intent = new Intent(this,Vote.class);
         intent.putExtra(PARTICIPANT,participant);
         intent.putExtra(PARTICIPANT_NAME,participants[participant]);
+        intent.putExtra(ID_JURY ,jury_id);
         startActivity(intent);
     }
 

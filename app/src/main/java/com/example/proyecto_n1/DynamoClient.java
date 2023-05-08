@@ -12,7 +12,7 @@ public class DynamoClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
     private static JSONArray res;
     public static void put(int J, int P, int proyeccion, int lenguaje, int contenido, AsyncHttpResponseHandler responseHandler) {
-        String url = String.format("https://bsomlyl7kivajbpbxyt6i7aiku0zkjqp.lambda-url.us-east-1.on.aws/?jurado=%i&participant=%i&proyeccion=%i&lenguaje=%i&contenido=%i", J, P, proyeccion, lenguaje, contenido);
+        String url = String.format("https://bsomlyl7kivajbpbxyt6i7aiku0zkjqp.lambda-url.us-east-1.on.aws/?jurado=%d&participant=%d&proyeccion=%d&lenguaje=%d&contenido=%d", J, P, proyeccion, lenguaje, contenido);
         client.get(url, responseHandler);
     }
 

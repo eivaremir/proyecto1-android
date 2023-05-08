@@ -76,7 +76,6 @@ public class Login extends AppCompatActivity {
                 });
             }
         });
-
     }
 
     public void openMainActivity(int id){
@@ -88,5 +87,4 @@ public class Login extends AppCompatActivity {
         intent.putExtra(ID,id);
         startActivity(intent);
     }
-
 }

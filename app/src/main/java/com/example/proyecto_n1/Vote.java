@@ -11,6 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
 
 public class Vote extends AppCompatActivity {
     private Integer proyeccion_pts = 0;
@@ -35,6 +40,9 @@ public class Vote extends AppCompatActivity {
         Intent intent = getIntent();
         Integer participant = intent.getIntExtra(MainActivity.PARTICIPANT,0);
         String participantName = intent.getStringExtra(MainActivity.PARTICIPANT_NAME);
+        Integer jury_id = intent.getIntExtra(MainActivity.ID_JURY,0);
+
+        System.out.println("(VOTE)ID JURADO: " + jury_id);
 
         ((TextView)findViewById(R.id.vote_for_title)).setText("Votar por "+participantName);
 
@@ -65,8 +73,25 @@ public class Vote extends AppCompatActivity {
         voteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                voteBtn.setVisibility(View.INVISIBLE);
-                voting.setVisibility(View.VISIBLE);
+
+                proyeccion_pts = Integer.parseInt(proyeccion.getText().toString());
+                lenguaje_pts = Integer.parseInt(lenguaje.getText().toString());
+                contenido_pts = Integer.parseInt(contenido.getText().toString());
+
+                if ((proyeccion_pts == 0) || (proyeccion_pts > 10)
+                        || (lenguaje_pts == 0) ||(lenguaje_pts > 10)
+                        || (contenido_pts == 0) || (contenido_pts > 10)){
+                    Toast.makeText(Vote.this, "El valor debe estar entre 1 y 10", Toast.LENGTH_SHORT).show();
+                } else {
+                    voteBtn.setVisibility(View.INVISIBLE);
+                    voting.setVisibility(View.VISIBLE);
+
+                    DynamoClient.put(jury_id, participant, proyeccion_pts, lenguaje_pts, contenido_pts, new JsonHttpResponseHandler());
+                }
+
+
+
+
             }
         });
     }
