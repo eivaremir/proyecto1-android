@@ -15,18 +15,18 @@ import org.w3c.dom.Text;
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView txt;
+    //private TextView txt;
     public static final String PARTICIPANT = "com.example.proyecto_n1.PARTICIPANT";
     public static final String PARTICIPANT_NAME = "com.example.proyecto_n1.PARTICIPANT_NAME";
     public static final String ID_JURY = "com.example.proyecto_n1.ID_JURY";
     final String field = "PK";
     final String value = "PARTICIPANT";
 
-    public String[] participants = {"A","B"};
+    public JSONArray participants;
     public EditText[] pButtons;
+    LinearLayout pcontainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -35,39 +35,17 @@ public class MainActivity extends AppCompatActivity {
         int jury_id = intent.getIntExtra(Login.ID,0);
         TextView jury_name = findViewById(R.id.jury_username);
 
-
-        // https://stackoverflow.com/questions/6661261/adding-content-to-a-linear-layout-dynamically
-        // LinearLayout myRoot = (LinearLayout) findViewById(R.id.my_root);
-        //LinearLayout a = new LinearLayout(this);
-        //a.setOrientation(LinearLayout.HORIZONTAL);
-        //a.addView(view1);
-        //a.addView(view2);
-        //a.addView(view3);
-        //myRoot.addView(a);
-        LinearLayout pcontainer = (LinearLayout) findViewById(R.id.participants_container);
-
-        for(int i = 0; i<participants.length;i++){
-            TextView tv = new TextView(this);
-            tv.setText(participants[i]);
-            tv.setTag(i);
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //System.out.println("clicked %i"+ (int )view.getTag());
-                    openVoteActivity((int)view.getTag(), jury_id);
-                }
-            });
-            pcontainer.addView(tv);
-        }
-
-        //DynamoClient api = new DynamoClient();
+         pcontainer = (LinearLayout) findViewById(R.id.participants_container);
 
         DynamoClient.list(field, value, new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                // System.out.println(timeline);
-                JSONObject P = null;
+                setParticipantList(response,jury_id);
 
+
+                /*
+                JSONObject P = null;
                 try {
                     P = response.getJSONObject(0);
 
@@ -79,48 +57,24 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+                */
 
+            }
+
+
+
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+                System.out.println("retry");
             }
         });
 
 
+
         jury_name.setText(user);
 
-        /*client1.get("https://bsomlyl7kivajbpbxyt6i7aiku0zkjqp.lambda-url.us-east-1.on.aws/", new JsonHttpResponseHandler() { //proyecto-android-put
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                System.out.println(response);
-
-            }
-
-        });*/
-
-        /*client2.get("https://o2bmssj4wi2c7yegtqe3cdrmii0spsqy.lambda-url.us-east-1.on.aws/?attr=PK&value=PARTICIPANT",new JsonHttpResponseHandler() { //proyecto-android-list
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
-                // System.out.println(timeline);
-
-                JSONObject firstEvent = null;
-                try {
-                    firstEvent = timeline.getJSONObject(0);
-                    //txt.setText(firstEvent.getString("PK"));
-                    System.out.println(firstEvent.getString("PK"));
-
-
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            //@Override
-            public void onFailure(int statusCode, Header[] headers,JSONObject errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                System.out.println("ERROR");
-            }
-        });*/
-
-        //System.out.println("ID JURADO: " + jury_id);
         ((Button) findViewById(R.id.results)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,11 +93,33 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("exito");
         }
     }
+    public void setParticipantList(JSONArray participants,Integer jury_id){
+        for(int i = 0; i < participants.length(); i++){
+            TextView tv = new TextView(this);
+            try {
+                JSONObject p =participants.getJSONObject(i);
+                String txt = p.getString("name");
+                tv.setText(p.getString("name"));
+                tv.setTag(Integer.parseInt(p.getString("PK").split("#")[1]));
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //System.out.println("clicked %i"+ (int )view.getTag());
+                        openVoteActivity((int)view.getTag(), jury_id, txt);
+                    }
+                });
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
 
-    public void openVoteActivity(Integer participant, int jury_id){
+
+            pcontainer.addView(tv);
+        }
+    }
+    public void openVoteActivity(Integer participant, int jury_id, String txt){
         Intent intent = new Intent(this,Vote.class);
         intent.putExtra(PARTICIPANT,participant);
-        intent.putExtra(PARTICIPANT_NAME,participants[participant]);
+        intent.putExtra(PARTICIPANT_NAME, txt);
         intent.putExtra(ID_JURY ,jury_id);
         startActivityForResult(intent,1);
     }
