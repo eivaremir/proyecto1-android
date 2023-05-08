@@ -37,6 +37,7 @@ public class Login extends AppCompatActivity {
         EditText user = findViewById(R.id.username);
 
         progress= findViewById(R.id.progressLogin);
+        System.out.println("33-");
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,6 +46,8 @@ public class Login extends AppCompatActivity {
                 DynamoClient.list(field, text, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        System.out.println(response);
+                        System.out.println("1");
                         JSONObject id = null;
                         if (response.length() != 0){
                             try {

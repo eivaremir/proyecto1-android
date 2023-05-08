@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public JSONArray participants;
     public EditText[] pButtons;
     LinearLayout pcontainer;
+    int jury_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -32,49 +33,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         String user = intent.getStringExtra(Login.USER);
-        int jury_id = intent.getIntExtra(Login.ID,0);
+         jury_id = intent.getIntExtra(Login.ID,0);
         TextView jury_name = findViewById(R.id.jury_username);
 
          pcontainer = (LinearLayout) findViewById(R.id.participants_container);
 
-        DynamoClient.list(field, value, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                setParticipantList(response,jury_id);
-
-
-                /*
-                JSONObject P = null;
-                try {
-                    P = response.getJSONObject(0);
-
-                    System.out.println(P.getString(field));
-
-                    //txt.setText(P.getString("PK"));
-                    System.out.println(P.getString("PK"));
-
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                */
-
-            }
-
-
-
-
-            @Override
-            public void onRetry(int retryNo) {
-                // called when request is retried
-                System.out.println("retry");
-            }
-        });
-
-
-
-        jury_name.setText(user);
-
+         jury_name.setText(user);
+        fetchParticipants();
         ((Button) findViewById(R.id.results)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,10 +55,19 @@ public class MainActivity extends AppCompatActivity {
         if ( resultCode == RESULT_OK) {
             // refresh data in the parent activity here
             // check if i need to refresh data or not
-            System.out.println("exito");
+            fetchParticipants();
         }
     }
+    public void fetchParticipants(){
+        DynamoClient.list(field, value, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                setParticipantList(response,jury_id);
+            }
+        });
+    }
     public void setParticipantList(JSONArray participants,Integer jury_id){
+        pcontainer.removeAllViews();
         for(int i = 0; i < participants.length(); i++){
             TextView tv = new TextView(this);
             try {
@@ -111,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
 
             pcontainer.addView(tv);
         }
