@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String PARTICIPANT_NAME = "com.example.proyecto_n1.PARTICIPANT_NAME";
     final String field = "PK";
     final String value = "PARTICIPANT";
-    private static AsyncHttpClient client1 = new AsyncHttpClient();
-    private static AsyncHttpClient client2 = new AsyncHttpClient();
 
     public String[] participants = {"A","B"};
     public EditText[] pButtons;
@@ -33,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String user = intent.getStringExtra(Login.USER);
         TextView jury_name = findViewById(R.id.jury_username);
+
 
         // https://stackoverflow.com/questions/6661261/adding-content-to-a-linear-layout-dynamically
         // LinearLayout myRoot = (LinearLayout) findViewById(R.id.my_root);
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //DynamoClient api = new DynamoClient();
-        //txt = findViewById(R.id.txt);
 
         DynamoClient.list(field, value, new JsonHttpResponseHandler() {
             @Override
@@ -69,8 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     P = response.getJSONObject(0);
+
+                    System.out.println(P.getString(field));
+
                     //txt.setText(P.getString("PK"));
                     System.out.println(P.getString("PK"));
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
