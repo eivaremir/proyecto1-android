@@ -117,12 +117,22 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("HOLA");
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ( resultCode == RESULT_OK) {
+            // refresh data in the parent activity here
+            // check if i need to refresh data or not
+            System.out.println("exito");
+        }
+    }
 
     public void openVoteActivity(Integer participant){
         Intent intent = new Intent(this,Vote.class);
         intent.putExtra(PARTICIPANT,participant);
         intent.putExtra(PARTICIPANT_NAME,participants[participant]);
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
 
 }

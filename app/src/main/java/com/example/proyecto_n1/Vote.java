@@ -2,6 +2,7 @@ package com.example.proyecto_n1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -67,6 +68,9 @@ public class Vote extends AppCompatActivity {
             public void onClick(View view) {
                 voteBtn.setVisibility(View.INVISIBLE);
                 voting.setVisibility(View.VISIBLE);
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
             }
         });
     }
