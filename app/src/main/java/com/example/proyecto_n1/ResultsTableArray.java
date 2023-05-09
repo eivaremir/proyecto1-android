@@ -36,9 +36,9 @@ public class ResultsTableArray {
                     contenido = (Integer.parseInt(votacion.getString("contenido")));
 
                     // si la votacion v corresponde al participante i
-                    System.out.println(" "+jury_id+" "+id_jury+" "+id_participant+" "+pk+" = "+(jury_id!=null)+"&&"+ ((Integer)jury_id==(Integer) id_jury) +"&&"+ (id_participant == pk) +" || "+ ((jury_id==null)  && (id_participant == pk)));
+                    //System.out.println(" "+jury_id+" "+id_jury+" "+id_participant+" "+pk+" = "+(jury_id!=null)+"&&"+ ((Integer)jury_id==(Integer) id_jury) +"&&"+ (id_participant == pk) +" || "+ ((jury_id==null)  && (id_participant == pk)));
                     if (((jury_id!=null) && (jury_id.equals(id_jury)) && (id_participant == pk) )|| ((jury_id==null)  && (id_participant == pk))){
-                        System.out.println("Participant "+id_participant);
+                        //System.out.println("Participant "+id_participant);
                         pts[i][1]+= (proyeccion);
                         pts[i][2]+= (lenguaje);
                         pts[i][3]+= (contenido);
@@ -46,7 +46,7 @@ public class ResultsTableArray {
                     }
                 }
             }
-            System.out.println("Column 1\tColumn 2");
+            //System.out.println("Column 1\tColumn 2");
 
             Arrays.sort(pts, new Comparator<int[]>() {
                 @Override

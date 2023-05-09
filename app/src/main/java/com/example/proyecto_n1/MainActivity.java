@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TableLayout table ;
     TableRow[] rows;
     int jury_id;
+    ProgressBar spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,7 +44,14 @@ public class MainActivity extends AppCompatActivity {
         String user = intent.getStringExtra(Login.USER);
          jury_id = intent.getIntExtra(Login.ID,0);
         TextView jury_name = findViewById(R.id.jury_username);
-
+        Button refreshBtn = findViewById(R.id.refresh);
+        spinner = findViewById(R.id.participantsProgress);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchParticipants();
+            }
+        });
          pcontainer = (LinearLayout) findViewById(R.id.participants_container);
          table = findViewById((R.id.table));
          jury_name.setText(user);
@@ -64,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void fetchParticipants(){
+        spinner.setVisibility(View.VISIBLE);
+        table.setVisibility(View.GONE);
+        try {
+            // Sleep for 5 seconds
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            // Handle the exception if necessary
+        }
         DynamoClient.list(field, value, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray participants) {
@@ -79,6 +98,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setVisibility(View.GONE);
+                table.setVisibility(View.VISIBLE);
+            }
+        }, 1000);
     }
 
     public int getResultsIndex(int id,int [][] pts){
@@ -110,7 +138,9 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < participants.length(); i++){
 
             TableRow row= new TableRow((this));
+            row.setGravity(Gravity.CENTER_HORIZONTAL);
             TextView tv = new TextView(this);
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
             int[] result;
             Integer participant_id;
             Integer results_idx;
@@ -126,32 +156,33 @@ public class MainActivity extends AppCompatActivity {
                 //tv.setBackground(Drawable.createFromPath("../res/drawable/table_border.xml"));
                 tv.setText(p.getString("name"));
                 tv.setTag(Integer.parseInt(p.getString("PK").split("#")[1]));
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //System.out.println("clicked %i"+ (int )view.getTag());
-                        openVoteActivity((int)view.getTag(), jury_id, txt);
-                    }
-                });
+
+                if(result[4]==0) {
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //System.out.println("clicked %i"+ (int )view.getTag());
+                            openVoteActivity((int) view.getTag(), jury_id, txt);
+                        }
+                    });
+                }else{
+                    // toast de error aqui "Ya has votado por el participante {name}
+                }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
             row.addView(tv);
             int sum = 0;
-            for (int r = 2; r < result.length-1; r++) {
+            for (int r = 1; r < result.length-1; r++) {
                 TextView pt = new TextView(this);
-                pt.setPadding(5,5,5,5);
+                pt.setPadding(5,10,5,10);
                 //tv.setBackground(Drawable.createFromPath("../res/drawable/table_border.xml"));
                 pt.setText(((Integer)result[r]).toString());
                 sum+=(Integer)result[r];
+                pt.setGravity(Gravity.CENTER_HORIZONTAL);
                 row.addView(pt);
             }
-            TextView pt = new TextView(this);
-            pt.setPadding(5,5,5,5);
-            //tv.setBackground(Drawable.createFromPath("../res/drawable/table_border.xml"));
-            pt.setText(((Integer)sum).toString());
 
-            row.addView(pt);
             table.addView((row));
             //pcontainer.addView(tabl);
             rows[i] = row;

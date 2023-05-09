@@ -70,7 +70,16 @@ public class Vote extends AppCompatActivity {
         lenguaje.addTextChangedListener(tw);
 
         Button voteBtn = findViewById(R.id.vote);
+        Button back = findViewById(R.id.back);
         ProgressBar voting = findViewById(R.id.voting);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+        });
         voteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +93,7 @@ public class Vote extends AppCompatActivity {
                     Toast.makeText(Vote.this, "El valor debe estar entre 1 y 10", Toast.LENGTH_SHORT).show();
                 } else {
                     voteBtn.setVisibility(View.INVISIBLE);
+                    back.setVisibility(View.INVISIBLE);
                     voting.setVisibility(View.VISIBLE);
                     DynamoClient.put(jury_id, participant, proyeccion_pts, lenguaje_pts, contenido_pts, new JsonHttpResponseHandler());
                     Intent resultIntent = new Intent();
