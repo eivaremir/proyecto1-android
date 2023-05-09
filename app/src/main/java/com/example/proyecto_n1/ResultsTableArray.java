@@ -28,7 +28,10 @@ public class ResultsTableArray {
                 // por cada votacion
                 for(int v  =0;v<response.length();v++){
                     JSONObject votacion = response.getJSONObject(v);
-                    Integer id_participant = Integer.parseInt(votacion.getString("SK").split("#")[3]);
+                    int id_participant = Integer.parseInt(votacion.getString("SK").split("#")[3]);
+                    //System.out.println("id_participant (TABLEARRAY): " id_participant);
+                    //System.out.println("votacion (TABLEARRAY): "votacion);
+                    //System.out.println("SPLIT (TABLEARRAY): "votacion.getString("SK").split("#")[3]);
                     Integer id_jury = Integer.parseInt(votacion.getString("SK").split("#")[1]);
 
                     proyeccion = (Integer.parseInt(votacion.getString("proyeccion")));
