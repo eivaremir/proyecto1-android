@@ -2,11 +2,14 @@ package com.example.proyecto_n1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import com.loopj.android.http.*;
 import org.json.*;
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     public JSONArray participants;
     public EditText[] pButtons;
     LinearLayout pcontainer;
+    TableLayout table ;
+    TableRow[] rows;
     int jury_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         TextView jury_name = findViewById(R.id.jury_username);
 
          pcontainer = (LinearLayout) findViewById(R.id.participants_container);
-
+         table = findViewById((R.id.table));
          jury_name.setText(user);
         fetchParticipants();
         ((Button) findViewById(R.id.results)).setOnClickListener(new View.OnClickListener() {
@@ -66,13 +71,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void setParticipantList(JSONArray participants,Integer jury_id){
-        pcontainer.removeAllViews();
+        //pcontainer.removeAllViews();
+
+        if(rows!=null) {
+            for (int r = 0; r < rows.length; r++) {
+                table.removeView(rows[r]);
+            }
+        }
+        rows = new TableRow[participants.length()];
+
+
         for(int i = 0; i < participants.length(); i++){
+
+            TableRow row= new TableRow((this));
             TextView tv = new TextView(this);
             try {
                 JSONObject p =participants.getJSONObject(i);
                 String txt = p.getString("name");
+                tv.setPadding(5,5,5,5);
+                //tv.setBackground(Drawable.createFromPath("../res/drawable/table_border.xml"));
                 tv.setText(p.getString("name"));
                 tv.setTag(Integer.parseInt(p.getString("PK").split("#")[1]));
                 tv.setOnClickListener(new View.OnClickListener() {
@@ -85,8 +104,10 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
-            pcontainer.addView(tv);
+            row.addView(tv);
+            table.addView((row));
+            //pcontainer.addView(tabl);
+            rows[i] = row;
         }
     }
     public void openVoteActivity(Integer participant, int jury_id, String txt){
