@@ -66,15 +66,39 @@ public class MainActivity extends AppCompatActivity {
     public void fetchParticipants(){
         DynamoClient.list(field, value, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                setParticipantList(response,jury_id);
+            public void onSuccess(int statusCode, Header[] headers, JSONArray participants) {
+                DynamoClient.list("PK", "VOTACION", new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        int[][] pts = ResultsTableArray.computeResults(  response,participants,jury_id);
+
+                        setParticipantList(participants,pts,jury_id);
+                    }
+                });
+
+
             }
         });
     }
 
-    public void setParticipantList(JSONArray participants,Integer jury_id){
+    public int getResultsIndex(int id,int [][] pts){
+        int idx = 0 ;
+        for (int p=0;p<pts.length;p++){
+            if(pts[p][0]==id) {
+                idx = p;
+                break;
+            }
+        }
+        return idx;
+    }
+    public void setParticipantList(JSONArray participants,int[][] pts, Integer jury_id){
         //pcontainer.removeAllViews();
-
+        for (int i = 0; i < pts.length; i++) { //part_puntaje.length
+            for (int j = 0; j < pts[1].length; j++) {
+                System.out.print(pts[i][j] + "\t\t");
+            }
+            System.out.println();
+        }
         if(rows!=null) {
             for (int r = 0; r < rows.length; r++) {
                 table.removeView(rows[r]);
@@ -87,8 +111,16 @@ public class MainActivity extends AppCompatActivity {
 
             TableRow row= new TableRow((this));
             TextView tv = new TextView(this);
+            int[] result;
+            Integer participant_id;
+            Integer results_idx;
             try {
                 JSONObject p =participants.getJSONObject(i);
+
+                participant_id = Integer.parseInt( p.getString("PK").split("#")[1]);
+                results_idx = getResultsIndex(participant_id,pts);
+                result = pts[results_idx];
+
                 String txt = p.getString("name");
                 tv.setPadding(5,5,5,5);
                 //tv.setBackground(Drawable.createFromPath("../res/drawable/table_border.xml"));
@@ -105,6 +137,21 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             row.addView(tv);
+            int sum = 0;
+            for (int r = 2; r < result.length-1; r++) {
+                TextView pt = new TextView(this);
+                pt.setPadding(5,5,5,5);
+                //tv.setBackground(Drawable.createFromPath("../res/drawable/table_border.xml"));
+                pt.setText(((Integer)result[r]).toString());
+                sum+=(Integer)result[r];
+                row.addView(pt);
+            }
+            TextView pt = new TextView(this);
+            pt.setPadding(5,5,5,5);
+            //tv.setBackground(Drawable.createFromPath("../res/drawable/table_border.xml"));
+            pt.setText(((Integer)sum).toString());
+
+            row.addView(pt);
             table.addView((row));
             //pcontainer.addView(tabl);
             rows[i] = row;

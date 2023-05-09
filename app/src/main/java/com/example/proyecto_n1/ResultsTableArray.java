@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Comparator;
-
+import java.nio.ByteBuffer;
 public class ResultsTableArray {
     public static int[][] computeResults(JSONArray response,JSONArray parts, Integer jury_id ){
         System.out.println("RESPONSE" + response);
@@ -36,8 +36,8 @@ public class ResultsTableArray {
                     contenido = (Integer.parseInt(votacion.getString("contenido")));
 
                     // si la votacion v corresponde al participante i
-
-                    if (((jury_id!=null) && (jury_id==id_jury) && (id_participant == pk) )|| ((jury_id==null)  && (id_participant == pk))){
+                    System.out.println(" "+jury_id+" "+id_jury+" "+id_participant+" "+pk+" = "+(jury_id!=null)+"&&"+ ((Integer)jury_id==(Integer) id_jury) +"&&"+ (id_participant == pk) +" || "+ ((jury_id==null)  && (id_participant == pk)));
+                    if (((jury_id!=null) && (jury_id.equals(id_jury)) && (id_participant == pk) )|| ((jury_id==null)  && (id_participant == pk))){
                         System.out.println("Participant "+id_participant);
                         pts[i][1]+= (proyeccion);
                         pts[i][2]+= (lenguaje);
