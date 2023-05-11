@@ -54,7 +54,7 @@ public class ResultsTableArray {
             Arrays.sort(pts, new Comparator<int[]>() {
                 @Override
                 public int compare(int[] a, int[] b) {
-                    return Integer.compare(b[1], a[1]);
+                    return Integer.compare(b[4], a[4]);
                 }
             });
 

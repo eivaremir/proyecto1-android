@@ -14,6 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.content.Context;
+import android.widget.Toast;
+
 import com.loopj.android.http.*;
 import org.json.*;
 import org.w3c.dom.Text;
@@ -157,17 +160,24 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText(p.getString("name"));
                 tv.setTag(Integer.parseInt(p.getString("PK").split("#")[1]));
 
-                if(result[4]==0) {
+
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //System.out.println("clicked %i"+ (int )view.getTag());
-                            openVoteActivity((int) view.getTag(), jury_id, txt);
+
+                            if(result[4]==0) {
+                                //System.out.println("clicked %i"+ (int )view.getTag());
+                                openVoteActivity((int) view.getTag(), jury_id, txt);
+                            }
+                            else{
+                                String toasTXT;
+                                toasTXT = "Ya has votado por " + txt;
+                                Toast.makeText(getApplicationContext(), toasTXT, Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     });
-                }else{
-                    // toast de error aqui "Ya has votado por el participante {name}
-                }
+
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
