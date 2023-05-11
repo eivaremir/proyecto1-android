@@ -137,7 +137,7 @@ public class Results extends AppCompatActivity {
                         String [][] primeros_puestos =  new String[ind][4];
                         for (int i = 0; i < ind; i++){
                             for (int j = 0; j < ind; j++){
-                                if((pts[i][0] == Integer.parseInt(name_pts[j][0]))){ //&& (pts[i][4] > 0)
+                                if(pts[i][0] == Integer.parseInt(name_pts[j][0])){ //
                                     primeros_puestos[i][0] = name_pts[j][0];
                                     primeros_puestos[i][1] = name_pts[j][1];
                                     primeros_puestos[i][2] = Integer.toString(pts[i][5]);
@@ -175,21 +175,29 @@ public class Results extends AppCompatActivity {
                             pos = repeat_part[i] + 1;
                             txt = "";
                             tempo = "";
-                            int lugar = 0;
+                            String lugar = "";
                             h = 0;
                             //System.out.println("POS: " + pos);
                             System.out.println("TEMPO: " + tempo);
                             for(int j = 0; j < pos; j++){
-                                tempo = primeros_puestos[n][1];
-                                txt += j == pos-1? tempo : tempo + ", ";
-                                System.out.println("IF CONCATENATED: " + txt);
-                                System.out.println("TEMPO: " + primeros_puestos[i][3]);
-                                lugar = Integer.parseInt(primeros_puestos[n][2]);
-                                n +=  1;
-                                h += 1;
+                                if (Integer.parseInt(primeros_puestos[n][3]) > 0){
+                                    tempo = primeros_puestos[n][1];
+                                    txt += j == pos-1? tempo : tempo + ", ";
+                                    System.out.println("IF CONCATENATED: " + txt);
+                                    System.out.println("TEMPO: " + primeros_puestos[n][3]);
+                                    lugar = primeros_puestos[n][2];
+                                    ganadores[i][1] = primeros_puestos[n][3];
+                                    n +=  1;
+                                    h += 1;
+                                } else {
+                                    txt = "No hay suficientes participantes";
+                                    ganadores[i][1] = "0";
+                                }
+
                             }
+
                             ganadores[i][0] = txt;
-                            ganadores[i][1] = primeros_puestos[i][3];
+
 
                             if (h > 1) {
                                 TextView textView = new TextView(Results.this);
