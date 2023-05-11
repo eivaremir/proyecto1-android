@@ -67,7 +67,9 @@ public class Results extends AppCompatActivity {
         pts2 = findViewById(R.id.pts2);
         pts3 = findViewById(R.id.pts3);
 
-        empate = findViewById(R.id.empate);
+        LinearLayout layout = findViewById(R.id.empates);
+
+        //empate = findViewById(R.id.empate);
 
 
 
@@ -98,9 +100,9 @@ public class Results extends AppCompatActivity {
                     }
                 }
 
-                /*for(int i = 0; i < repeat_part.length; i++){
+                for(int i = 0; i < repeat_part.length; i++){
                     System.out.println("REPETIR " + repeat_part[i]);
-                }*/
+                }
 
                 DynamoClient.list("PK", "PARTICIPANT", new JsonHttpResponseHandler(){
                     @Override
@@ -120,14 +122,14 @@ public class Results extends AppCompatActivity {
                             throw new RuntimeException(e);
                         }
 
-                        /*System.out.println("ARREGLO PARTICIPANTES: ");
+                        System.out.println("ARREGLO PARTICIPANTES: ");
                         System.out.println("ID\t\tNAME");
                         for (int i = 0; i < name_pts.length; i++) {
                             for (int j = 0; j < name_pts[0].length; j++) {
                                 System.out.print(name_pts[i][j] + " ");
                             }
                             System.out.println();
-                        }*/
+                        }
 
                         //System.out.println("PTS.LENGTH: "+ pts.length);
                         int ind = pts.length;
@@ -135,7 +137,7 @@ public class Results extends AppCompatActivity {
                         String [][] primeros_puestos =  new String[ind][4];
                         for (int i = 0; i < ind; i++){
                             for (int j = 0; j < ind; j++){
-                                if(pts[i][0] == Integer.parseInt(name_pts[j][0])){
+                                if((pts[i][0] == Integer.parseInt(name_pts[j][0]))){ //&& (pts[i][4] > 0)
                                     primeros_puestos[i][0] = name_pts[j][0];
                                     primeros_puestos[i][1] = name_pts[j][1];
                                     primeros_puestos[i][2] = Integer.toString(pts[i][5]);
@@ -148,19 +150,20 @@ public class Results extends AppCompatActivity {
                             }
                         }
 
-                        /*System.out.println("PRIMEROS_PUESTOS: ");
+                        System.out.println("PRIMEROS_PUESTOS: ");
                         System.out.println("ID\t\tNAME");
                         for (int i = 0; i < primeros_puestos.length; i++) {
                             for (int j = 0; j < primeros_puestos[0].length; j++) {
                                 System.out.print(primeros_puestos[i][j] + " ");
                             }
                             System.out.println();
-                        }*/
+                        }
 
 
 
                         int pos;
                         String txt, tempo;
+                        int n = 0, h = 0;
                         /*
                         if (repeat_part.length != 0) {
                         for
@@ -171,16 +174,32 @@ public class Results extends AppCompatActivity {
                         for( int i = 0; i < repeat_part.length; i++){
                             pos = repeat_part[i] + 1;
                             txt = "";
+                            tempo = "";
+                            int lugar = 0;
+                            h = 0;
                             //System.out.println("POS: " + pos);
+                            System.out.println("TEMPO: " + tempo);
                             for(int j = 0; j < pos; j++){
-                                tempo = primeros_puestos[i+j][1];
+                                tempo = primeros_puestos[n][1];
                                 txt += j == pos-1? tempo : tempo + ", ";
-                                //System.out.println("IF CONCATENATED: " + txt);
-                                //System.out.println("TEMPO: " + primeros_puestos[i][3]);
+                                System.out.println("IF CONCATENATED: " + txt);
+                                System.out.println("TEMPO: " + primeros_puestos[i][3]);
+                                lugar = Integer.parseInt(primeros_puestos[n][2]);
+                                n +=  1;
+                                h += 1;
                             }
                             ganadores[i][0] = txt;
                             ganadores[i][1] = primeros_puestos[i][3];
+
+                            if (h > 1) {
+                                TextView textView = new TextView(Results.this);
+                                textView.setText("\nHa habido un empate en la posición "  + lugar);
+                                layout.addView(textView); // add the TextView to the LinearLayout
+                                textView.setTextSize(20);
+                            }
+
                         }
+
 
                         /*----------------------------------SEGUIR CODE AQUÍ----------------------------------*/
                         //TEXT VIEWS
@@ -199,17 +218,6 @@ public class Results extends AppCompatActivity {
                         pts1.setText("Obtuvo " + ganadores[0][1] + " puntos");
                         pts2.setText("Obtuvo " + ganadores[1][1] + " puntos");
                         pts3.setText("Obtuvo " + ganadores[2][1] + " puntos");
-
-
-                        /*LinearLayout layout = findViewById(R.id.myLinearLayout); // get a reference to your LinearLayout
-                        String[] names = {"John", "Jane", "Bob", "Mary"}; // the array of names
-                        int numNames = names.length;
-
-                        for (int i = 0; i < numNames; i++) {
-                            TextView textView = new TextView(this); // create a new TextView
-                            textView.setText(names[i]); // set the text of the TextView
-                            layout.addView(textView); // add the TextView to the LinearLayout
-                        }*/
 
 
                         /*if (repeat_part.length == 0) {

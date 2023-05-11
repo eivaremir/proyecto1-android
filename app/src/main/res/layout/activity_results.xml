@@ -59,20 +59,20 @@
             android:layout_marginBottom="10dp"
             android:text="1er Lugar"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="26sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/pos1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/pts1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView11"
@@ -82,20 +82,20 @@
             android:layout_marginBottom="10dp"
             android:text="2do Lugar"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="26sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/pos2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/pts2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView13"
@@ -105,26 +105,26 @@
             android:layout_marginBottom="10dp"
             android:text="3er Lugar"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="26sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/pos3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/pts3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/empate"
+        <LinearLayout
+            android:id="@+id/empates"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:textSize="24sp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        </LinearLayout>
 
     </LinearLayout>
 
