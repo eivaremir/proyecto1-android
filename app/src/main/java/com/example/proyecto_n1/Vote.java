@@ -89,7 +89,7 @@ public class Vote extends AppCompatActivity {
                 String contenido_str = contenido.getText().toString();
 
                if (proyeccion_str.isEmpty() || lenguaje_str.isEmpty() || contenido_str.isEmpty()) {
-                   Toast.makeText(Vote.this, "No puede dejar campos vacíos", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(Vote.this, "No puede dejar campos vacíos-", Toast.LENGTH_SHORT).show();
 
                } else {
 
@@ -100,7 +100,7 @@ public class Vote extends AppCompatActivity {
                    if ((proyeccion_pts == 0) || (proyeccion_pts > 10)
                            || (lenguaje_pts == 0) ||(lenguaje_pts > 10)
                            || (contenido_pts == 0) || (contenido_pts > 10)){
-                       Toast.makeText(Vote.this, "El valor debe estar entre 1 y 10", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(Vote.this, "El valor debe estar entre 1 y 10.", Toast.LENGTH_SHORT).show();
                        // } else if ((proyeccion_pts == null) || (lenguaje_pts == null) || (lenguaje_pts == null)) {
                        //   Toast.makeText(Vote.this, "No puede estar vacio", Toast.LENGTH_SHORT).show();
                    }
@@ -111,6 +111,7 @@ public class Vote extends AppCompatActivity {
                        DynamoClient.put(jury_id, participant, proyeccion_pts, lenguaje_pts, contenido_pts, new JsonHttpResponseHandler());
                        Intent resultIntent = new Intent();
                        setResult(Activity.RESULT_OK, resultIntent);
+                       Toast.makeText(Vote.this, "Su voto a sido almacenado exitosamente.", Toast.LENGTH_SHORT).show();
                        finish();
                    }
 

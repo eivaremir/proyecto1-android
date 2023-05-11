@@ -248,13 +248,13 @@ public class Results extends AppCompatActivity {
             }
         });
 
-        ((Button) findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
+        /*((Button) findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
-                openLoginActivity();
+                //openLoginActivity();
             }
-        });
+        });*/
 
         ((Button) findViewById(R.id.regresar)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,12 +263,6 @@ public class Results extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void openLoginActivity(){
-        Intent intent = new Intent(this, Login.class);
-        startActivity(intent);
-        Toast.makeText(this, "Se ha cerrado la sesión", Toast.LENGTH_SHORT).show();
     }
 
 }

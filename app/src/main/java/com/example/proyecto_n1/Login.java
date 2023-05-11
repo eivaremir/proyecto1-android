@@ -56,6 +56,7 @@ public class Login extends AppCompatActivity {
                                 jury_id = Integer.parseInt(jurys_id[1]);
                                 System.out.println("Jury ID:" + jurys_id[1]);
                                 openMainActivity(jury_id);
+                                Toast.makeText(Login.this, "Bienvenido jurado:" + text, Toast.LENGTH_SHORT).show();
 
                             } catch (JSONException e) {
                                 toggleSpinner(false);

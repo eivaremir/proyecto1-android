@@ -66,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
                 openResultsActivity();
             }
         });
+
+        ((Button) findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openLoginActivity();
+            }
+        });
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -208,6 +216,12 @@ public class MainActivity extends AppCompatActivity {
     public void openResultsActivity(){
         Intent intent = new Intent(this,Results.class);
         startActivity(intent);
+    }
+
+    public void openLoginActivity(){
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+        Toast.makeText(this, "Se ha cerrado la sesión", Toast.LENGTH_SHORT).show();
     }
 
 }
